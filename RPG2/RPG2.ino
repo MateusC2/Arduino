@@ -3,8 +3,10 @@
 #define pinVilaoLED 4
 #define ledvermelho 7
 #define ledverde 6
-#define ledamarelo 8
+#define ledamarelo 10
 #define buzzer 9
+#define pinoHeroi 3
+#define pinoVillian 2
 
 // Pino para o botão que será pressionado para rolar o dado
 int pinBotao = 8;
@@ -24,7 +26,9 @@ int vidaVilao = 100;
 int vidaHeroi = 100;
 
 //variavel de decisão de turnos
-bool turnosOn = true;
+bool turnosOn = false;
+bool gamestatus = false;
+bool comeco = true;
 
 void setup() {
   // Inicialização dos pinos
@@ -38,6 +42,9 @@ void setup() {
 }
 
 void loop() {
+  if (comeco = true){
+  inicio();
+  }
   //programaçao anterior para iniciar
   //_______________________________________________________________________________________________
   fim ();
@@ -109,7 +116,7 @@ void ataques() {
   if (resultadoDado > 10) {
     if (resultadoDado < 17) {
       digitalWrite(ledverde, HIGH);
-      tone(buzzer, 495);
+      tone(buzzer, 392);
       Serial.println("Acertou!!");
       delay(1500);
       digitalWrite(ledverde, LOW);
@@ -172,7 +179,7 @@ void ataqueVilao() {
   if (resultadoDado > 10) {
     if (resultadoDado < 17) {
       digitalWrite(ledverde, HIGH);
-      tone(buzzer, 495);
+      tone(buzzer, 392);
       Serial.println("Acertou!!");
       delay(1500);
       digitalWrite(ledverde, LOW);
@@ -230,4 +237,41 @@ void fim(){
     // Nada será executado além deste loop infinito
   }
  }
+}
+
+void inicio() {
+  if (digitalRead(pinBotao) == 1) {
+    digitalWrite(ledamarelo, HIGH);
+    Serial.println("Bem vindo ao RPG DUEL!!!");
+    Serial.println("Escolhe o seu personagem!");
+    delay(300);
+    Serial.println("1 Para heroi, 2 para Vilao");
+    delay(2000);
+    digitalWrite(ledamarelo, LOW);
+    gamestatus = true;
+  }
+  while (gamestatus == true) {
+
+    if (digitalRead(pinoHeroi) == 1) {
+      digitalWrite(ledverde, HIGH);
+      Serial.println("HEROIIII!!!");
+      Serial.println("Aperte o botao para iniciar");
+      delay(2000);
+      digitalWrite(ledverde, LOW);
+      gamestatus = false;
+      turnosOn = true;
+      comeco = false;
+    }
+    
+    if (digitalRead(pinoVillian) == 1) {
+      digitalWrite(ledvermelho, HIGH);
+      Serial.println("VILAAOOOO!!!");
+      Serial.println("Aperte o botao para iniciar");
+      delay(2000);
+      digitalWrite(ledvermelho, LOW);
+      gamestatus = false;
+      turnosOn = true;
+      comeco = false;
+    }
+  }
 }
