@@ -60,20 +60,22 @@ void loop() {
           // É par, é o turno do herói
           digitalWrite(pinHeroiLED, HIGH);
           digitalWrite(pinVilaoLED, LOW);
+          Serial.println("");
           Serial.println("Turno do heroi!");
           turnoHeroi = true;
           delay(2000);
           digitalWrite(pinHeroiLED, LOW);
-          Serial.println("Gire o dado novamente para atacar o VILAO!!");
+          Serial.println("Gire o dado novamente para atacar o VILAO!! \n");
         } else {
           // É ímpar, é o turno do vilão
           digitalWrite(pinHeroiLED, LOW);
           digitalWrite(pinVilaoLED, HIGH);
+          Serial.println("");
           Serial.println("Turno do vilao!");
           turnoVilao = true;
           delay(2000);
           digitalWrite(pinVilaoLED, LOW);
-          Serial.println("Gire o dado novamente para atacar o HEROI!!");
+          Serial.println("Gire o dado novamente para atacar o HEROI!! \n");
         }
         // Aguarda um tempo para evitar leituras rápidas  do botão
         delay(1000);
@@ -106,6 +108,7 @@ void ataques() {
     digitalWrite(ledvermelho, HIGH);
     tone(buzzer, 495);
     Serial.println("ERROU O ATAQUE");
+    Serial.println("");
     turnoHeroi = false;
     delay(1500);
     digitalWrite(ledvermelho, LOW);
@@ -126,6 +129,7 @@ void ataques() {
       delay(1500);
       Serial.print("VIDA ATUAL DO Vilao: ");
       Serial.println(vidaVilao);
+      Serial.println("");
       delay(1000);
       turnoHeroi = false;
     }
@@ -143,6 +147,7 @@ void ataques() {
       delay(1500);
       Serial.print("VIDA ATUAL DO Vilao: ");
       Serial.println(vidaVilao);
+      Serial.println("");
       delay(1000);
       turnoHeroi = false;
     }
@@ -169,6 +174,7 @@ void ataqueVilao() {
      digitalWrite(ledvermelho, HIGH);
     tone(buzzer, 495);
     Serial.println("ERROU O ATAQUE");
+    Serial.println("");
     turnoVilao = false;
     delay(1500);
     digitalWrite(ledvermelho, LOW);
@@ -189,6 +195,7 @@ void ataqueVilao() {
       delay(1500);
       Serial.print("VIDA ATUAL DO Heroi: ");
       Serial.println(vidaHeroi);
+      Serial.println("");
       delay(1000);
       turnoVilao = false;
     }
@@ -206,6 +213,7 @@ void ataqueVilao() {
       delay(1500);
       Serial.print("VIDA ATUAL DO Heroi: ");
       Serial.println(vidaHeroi);
+      Serial.println("");
       delay(1000);
       turnoVilao = false;
     }
@@ -242,6 +250,7 @@ void inicio() {
   if (digitalRead(pinBotao) == 1 && comeco == true) {
     digitalWrite(ledamarelo, HIGH);
     Serial.println("Bem vindo ao RPG DUEL!!!");
+    delay(600);
     Serial.println("Escolhe o seu personagem!");
     delay(300);
     Serial.println("1 Para heroi, 2 para Vilao");
@@ -252,22 +261,27 @@ void inicio() {
   while (gamestatus == true) {
 
     if (digitalRead(pinoHeroi) == 1) {
-      digitalWrite(ledverde, HIGH);
+      digitalWrite(pinHeroiLED, HIGH);
       Serial.println("HEROIIII!!!");
-      Serial.println("Aperte o botao para iniciar");
+      Serial.println("Se o numero do dado for PAR o HEROI começa atacando!! \n");
+      Serial.println("Se o numero do dado for Impar o VILAO começa atacando!!");
+      Serial.println("Aperte o botao para iniciar \n");
       delay(2000);
-      digitalWrite(ledverde, LOW);
+      digitalWrite(pinHeroiLED, LOW);
       gamestatus = false;
       turnosOn = true;
       comeco = false;
     }
     
     if (digitalRead(pinoVillian) == 1) {
-      digitalWrite(ledvermelho, HIGH);
-      Serial.println("VILAAOOOO!!!");
+      digitalWrite(pinVilaoLED, HIGH);
+      Serial.println("VILAAOOOO!!! \n");
+      Serial.println("Se o numero do dado for PAR o HEROI começa atacando!!");
+      Serial.println("Se o numero do dado for Impar o VILAO começa atacando!!\n");
+      delay(1500);
       Serial.println("Aperte o botao para iniciar");
       delay(2000);
-      digitalWrite(ledvermelho, LOW);
+      digitalWrite(pinVilaoLED, LOW);
       gamestatus = false;
       turnosOn = true;
       comeco = false;
