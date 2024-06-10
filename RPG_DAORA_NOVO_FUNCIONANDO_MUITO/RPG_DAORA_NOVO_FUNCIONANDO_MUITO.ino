@@ -263,7 +263,7 @@ void inicio() {
     Serial.println("Escolhe o seu personagem!");
     delay(300);
     Serial.println("Aperte o Botao 1 Para heroi ou Botao 2 para Vilao \n");
-    delay(2000);
+    delay(1500);
     digitalWrite(ledamarelo, LOW);
     gamestatus = true;
   }
