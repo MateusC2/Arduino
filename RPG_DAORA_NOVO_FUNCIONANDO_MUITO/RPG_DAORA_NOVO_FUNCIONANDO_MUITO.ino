@@ -1,14 +1,16 @@
-#define pinHeroiLED 5
-#define pinVilaoLED 6
-#define ledvermelho 3
-#define ledverde 4
-#define ledamarelo 2
-#define buzzer 10
-#define pinoHeroi 8
-#define pinoVillian 7
+#define pinHeroiLED 5  //Led seleção do personagem HEROI
+#define pinVilaoLED 6  //Led seleção do personagem VILÃO
+#define ledvermelho 3  //Led errou ataque
+#define ledverde 4     //Led ataque normal
+#define ledamarelo 2   //Led ataque critico
+#define buzzer 10      //Buzzer para som dos ataques
+#define pinoHeroi 8    //Pino para selecionar o heroi
+#define pinoVillian 7  //Pino para selecionar o vilão
 
 // Pino para o botão que será pressionado para rolar o dado
-int pinBotao = 9;
+#define pinBotao 9  //Botão para começar o jogo e para a rolagem d
+
+//Estados dos botoes
 bool estadoBotao = false;           // Estado atual do botão
 bool estadoBotao_anterior = false;  // Estado anterior do botão
 
@@ -21,8 +23,8 @@ bool turnoVilao = false;
 int resultadoDado;
 
 //variaveis de vida
-int vidaVilao = 100;
-int vidaHeroi = 100;
+int vidaVilao = 30;
+int vidaHeroi = 30;
 
 //variavel de decisão de turnos
 bool turnosOn = false;
@@ -31,9 +33,18 @@ bool comeco = true;
 
 void setup() {
   // Inicialização dos pinos
+  //Leds
   pinMode(pinHeroiLED, OUTPUT);
   pinMode(pinVilaoLED, OUTPUT);
+  pinMode(ledvermelho, OUTPUT);
+  pinMode(ledverde, OUTPUT);
+  pinMode(ledamarelo, OUTPUT);
+  //Buzzer
+  pinMode(buzzer, OUTPUT);
+  //Botão
   pinMode(pinBotao, INPUT);
+  pinMode(pinoHeroi, INPUT);
+  pinMode(pinoVillian, INPUT);
 
   // Inicialização da comunicação serial para debug
   Serial.begin(9600);
@@ -41,12 +52,12 @@ void setup() {
 }
 
 void loop() {
-  if (comeco == true){
-  inicio();
+  if (comeco == true) {
+    inicio();
   }
-  //_______________________________________________________________________________________________
-  fim ();
-  //aaaaaaaaaaaaaaaaaaaaaaaa
+  //__________________________________
+  fim();
+  //__________________________________
   if (turnosOn) {  //dividir quais são os botoes
     estadoBotao = digitalRead(pinBotao);
     if (estadoBotao == HIGH && estadoBotao_anterior == LOW) {
@@ -153,13 +164,11 @@ void ataques() {
     }
   }
   //TROCA DE TURNO
-  Serial.println("Turno Vilao");
-  Serial.println("Aperte o botao para rolar o DADO!");
-  resultadoDado = 0;
-  turnoVilao = true;
-  if (estadoBotao == HIGH && estadoBotao_anterior == LOW) {
-    while (digitalRead(pinBotao) == HIGH) {
-    }
+  if (vidaVilao > 1) {
+    Serial.println("Turno Vilao");
+    Serial.println("Aperte o botao para rolar o DADO!");
+    resultadoDado = 0;
+    turnoVilao = true;
   }
 }
 
@@ -171,7 +180,7 @@ void ataqueVilao() {
   Serial.println(resultadoDado);
   delay(1000);
   if (resultadoDado <= 10) {
-     digitalWrite(ledvermelho, HIGH);
+    digitalWrite(ledvermelho, HIGH);
     tone(buzzer, 495);
     Serial.println("ERROU O ATAQUE");
     Serial.println("");
@@ -219,31 +228,31 @@ void ataqueVilao() {
     }
   }
   //TROCA DE TURNO
-  Serial.println("Turno Heroi");
-  Serial.println("Aperte o botao para rolar o DADO!");
-  resultadoDado = 0;
-  turnoHeroi = true;
-  if (estadoBotao == HIGH && estadoBotao_anterior == LOW) {
-      while (digitalRead(pinBotao) == HIGH) {
-      }
+  if (vidaHeroi > 1) {
+    Serial.println("Turno Heroi");
+    Serial.println("Aperte o botao para rolar o DADO!");
+    resultadoDado = 0;
+    turnoHeroi = true;
+  }
+}
+
+void fim() {
+  if (vidaHeroi <= 0) {
+    Serial.println("Fim de jogo!!!");
+    Serial.println("O vilao GANHOUU");
+    digitalWrite(pinVilaoLED, HIGH);
+    while (true) {
+      // Nada será executado além deste loop infinito
     }
   }
-
-void fim(){
- if (vidaHeroi <= 0){
-  Serial.println("Fim de jogo!!!");
-  Serial.println("O vilao GANHOUU");
-   while (true) {
-    // Nada será executado além deste loop infinito
+  if (vidaVilao <= 0) {
+    Serial.println("Fim de jogo!!!");
+    Serial.println("O heroi GANHOUU");
+    digitalWrite(pinHeroiLED, HIGH);
+    while (true) {
+      // Nada será executado além deste loop infinito
+    }
   }
- }
-  if (vidaVilao <= 0){
-  Serial.println("Fim de jogo!!!");
-  Serial.println("O heroi GANHOUU");
-   while (true) {
-    // Nada será executado além deste loop infinito
-  }
- }
 }
 
 void inicio() {
@@ -253,7 +262,7 @@ void inicio() {
     delay(600);
     Serial.println("Escolhe o seu personagem!");
     delay(300);
-    Serial.println("1 Para heroi, 2 para Vilao");
+    Serial.println("Aperte o Botao 1 Para heroi ou Botao 2 para Vilao \n");
     delay(2000);
     digitalWrite(ledamarelo, LOW);
     gamestatus = true;
@@ -272,7 +281,7 @@ void inicio() {
       turnosOn = true;
       comeco = false;
     }
-    
+
     if (digitalRead(pinoVillian) == 1) {
       digitalWrite(pinVilaoLED, HIGH);
       Serial.println("VILAAOOOO!!! \n");
@@ -288,4 +297,3 @@ void inicio() {
     }
   }
 }
-
